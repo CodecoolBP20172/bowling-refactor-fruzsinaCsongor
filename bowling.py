@@ -3,11 +3,7 @@ def score(game):
     frame = 1
     in_first_half = True
     for idx, char in enumerate(game):  # enumerate()
-        if char == '/':
-            result += 10 - last
-        else:
-            result += get_value(char)
-        if frame < 10 and get_value(char) == 10:
+        if frame < 10:  # removed value equaling with 10
             if char == '/':
                 result += get_value(game[idx+1])
             elif char.lower() == 'x':  # lower()
@@ -16,12 +12,15 @@ def score(game):
                     result += 10 - get_value(game[idx+1])
                 else:
                     result += get_value(game[idx+2])
+        if char == '/':
+            result += 10 - last
+        else:
+            result += get_value(char)
         last = get_value(char)
-        if not in_first_half:
-            frame += 1
         if in_first_half is True:
             in_first_half = False
         else:
+            frame += 1  # moved excess 'if' statement here
             in_first_half = True
         if char.lower() == 'x':  # lower()
             in_first_half = True
@@ -33,9 +32,7 @@ def get_value(char):
     nums = ['1', '2', '3', '4', '5', '6', '7', '8', '9']  # list of numbers 1-9
     if char in nums:
         return int(char)
-    elif char.lower() == 'x':  # lower()
-        return 10
-    elif char == '/':
+    elif char.lower() == 'x' or char == '/':  # lower(), one line for 10
         return 10
     elif char == '-':
         return 0
